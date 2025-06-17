@@ -1,0 +1,33 @@
+# Build artifacts
+[Dd]ebug/
+[Rr]elease/
+.settings/
+*.exe
+*.bak
+*.prefs
+*.launch
+
+# Documentation artifacts
+[Oo]ut/
+[Hh]tml/
+__html/
+__latex/
+__xml/
+__out/
+__rtf/
+__docman
+__docbook
+*.chm
+*.xml
+inline_umlgraph_cache_all.pu
+
+# IDEs specific
+.settings/
+/.metadata/
+.vscode/*
+!.vscode/unit_test.code-snippets
+
+# Miscellaneous
+Middleware/STM32_Cryptographic/
+!Middleware/STM32_Cryptographic/ReadMe.md
+*.cfg

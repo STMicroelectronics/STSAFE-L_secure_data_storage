@@ -176,12 +176,12 @@ int main(void) {
         STSE_NO_PROT);
     if (stse_ret != STSE_OK) {
         printf(PRINT_RED "\n\n\r ### stse_data_storage_read_data_zone : ERROR 0x%04X", stse_ret);
-        while (1)
-            ; // infinite loop
     } else {
         printf(PRINT_GREEN "\n\n\r - stse_data_storage_read_data_zone (zone : %d - length : %d - counter : %lu)", ZONE_INDEX, sizeof(readBuffer) / sizeof(readBuffer[0]), counter_value);
         apps_print_hex_buffer(readBuffer, sizeof(readBuffer));
     }
+
+    printf(PRINT_RESET "\n\r\n\r*#*# STMICROELECTRONICS #*#*\n\r");
 
     while (1)
         ; // infinite loop

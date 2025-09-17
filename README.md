@@ -1,6 +1,7 @@
 # STSAFE-L010 Secure data storage
-This project illustrates how to use the STSAFE-L010 Secure Element and STMicroelectronics Secure Element Library to perform data storage through STSAFE-L010 Secure Element.
-When loaded on the target MCU platform , the project performes the storage of 100 bytes through STSAFE-L010 User-NVM Zone 32. This storage scheme is typically used to store data securely.
+This project illustrates how to use the STSAFE-L010 Secure Element and STMicroelectronics Secure Element Library to perform data storage through STSAFE-L010 Secure Element.<br>
+When loaded on the target MCU platform , the project performes the storage of 100 bytes through STSAFE-L010 User-NVM Zone 32.<br>
+This storage scheme is typically used to store data securely.
 
 ```mermaid
 sequenceDiagram

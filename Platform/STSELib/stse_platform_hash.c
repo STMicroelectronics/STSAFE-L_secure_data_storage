@@ -59,8 +59,8 @@ static cmox_hash_algo_t stse_platform_get_cmox_hash_algo(stse_hash_algorithm_t h
 }
 
 stse_ReturnCode_t stse_platform_hash_compute(stse_hash_algorithm_t hash_algo,
-                                             PLAT_UI8 *pPayload, PLAT_UI32 payload_length,
-                                             PLAT_UI8 *pHash, PLAT_UI32 *hash_length) {
+                                             PLAT_UI8 *pPayload, PLAT_UI16 payload_length,
+                                             PLAT_UI8 *pHash, PLAT_UI16 *hash_length) {
 #if defined(STSE_CONF_HASH_SHA_1) || defined(STSE_CONF_HASH_SHA_224) ||                                      \
     defined(STSE_CONF_HASH_SHA_256) || defined(STSE_CONF_HASH_SHA_384) || defined(STSE_CONF_HASH_SHA_512) || \
     defined(STSE_CONF_HASH_SHA_3_256) || defined(STSE_CONF_HASH_SHA_3_284) || defined(STSE_CONF_HASH_SHA_3_512)

@@ -53,6 +53,8 @@ void apps_terminal_init(uint32_t baudrate) {
     uart_init(115200);
     /* Disable I/O buffering for STDOUT stream*/
     setvbuf(stdout, NULL, _IONBF, 0);
+    /* Disable I/O buffering for STDIN stream*/
+    setvbuf(stdin, NULL, _IONBF, 0);
     /* - Clear terminal */
     printf(PRINT_RESET PRINT_CLEAR_SCREEN);
 }
@@ -73,6 +75,15 @@ void apps_randomize_buffer(uint8_t *pBuffer, uint16_t buffer_length) {
     }
 }
 
+void apps_process_error(uint32_t err)
+{
+	if (err == STSE_PLATFORM_BUS_ACK_ERROR) {
+        printf(PRINT_RED "\n\r This error can be caused by an invalidated I2C communication interruption\n\rPlease power cycle STSAFE-L010 to exit from unstable state\n\r" PRINT_RESET);
+	}
+	/* Infinite loop */
+	while(1);
+}
+
 int main(void) {
     stse_ReturnCode_t stse_ret = STSE_API_INVALID_PARAMETER;
     stse_Handler_t stse_handler;
@@ -84,7 +95,7 @@ int main(void) {
     apps_terminal_init(115200);
 
     /* - Print Example instruction on terminal */
-    printf(PRINT_CLEAR_SCREEN);
+    printf(PRINT_CLEAR_SCREEN PRINT_RESET);
     printf("----------------------------------------------------------------------------------------------------------------");
     printf("\n\r-                            STSAFE-L010 secure data storage counter access example                            -");
     printf("\n\r----------------------------------------------------------------------------------------------------------------");
@@ -103,12 +114,15 @@ int main(void) {
     printf("\n\r-                                                                                                              -");
     printf("\n\r----------------------------------------------------------------------------------------------------------------");
 
+    /* Wait for press key */
+    printf("\n\n\r Press key to run secure data storage counter access example !!!\n\r");
+    getchar();
+
     /* ## Initialize STSAFE-L010 device handler */
     stse_ret = stse_set_default_handler_value(&stse_handler);
     if (stse_ret != STSE_OK) {
         printf(PRINT_RED "\n\r ## stse_set_default_handler_value ERROR : 0x%04X\n\r", stse_ret);
-        while (1)
-            ;
+        apps_process_error(stse_ret);
     }
 
     stse_handler.device_type = STSAFE_L010;
@@ -119,8 +133,7 @@ int main(void) {
     stse_ret = stse_init(&stse_handler);
     if (stse_ret != STSE_OK) {
         printf(PRINT_RED "\n\r ## stse_init ERROR : 0x%04X\n\r", stse_ret);
-        while (1)
-            ; // infinite loop
+        apps_process_error(stse_ret);
     }
 
     /* ## Read zone ZONE_INDEX (counter zone) */
@@ -135,8 +148,7 @@ int main(void) {
         STSE_NO_PROT);
     if (stse_ret != STSE_OK) {
         printf(PRINT_RED "\n\n\r ### stse_data_storage_read_data_zone : ERROR 0x%04X", stse_ret);
-        while (1)
-            ; // infinite loop
+        apps_process_error(stse_ret);
     } else {
         printf("\n\n\r - stse_data_storage_read_data_zone (zone : %d - length : %d - counter : %lu)", ZONE_INDEX, sizeof(readBuffer) / sizeof(readBuffer[0]), counter_value);
         apps_print_hex_buffer(readBuffer, sizeof(readBuffer));
@@ -157,8 +169,7 @@ int main(void) {
         STSE_NO_PROT);
     if (stse_ret != STSE_OK) {
         printf(PRINT_RED "\n\n\r ### stse_data_storage_decrement_counter_zone : ERROR 0x%04X", stse_ret);
-        while (1)
-            ; // infinite loop
+        apps_process_error(stse_ret);
     } else {
         printf("\n\n\r - stse_data_storage_decrement_counter_zone (zone = %d - length = %d - New counter : %lu)", ZONE_INDEX, sizeof(random) / sizeof(random[0]), counter_value);
         apps_print_hex_buffer(random, sizeof(random));
@@ -183,8 +194,7 @@ int main(void) {
 
     printf(PRINT_RESET "\n\r\n\r*#*# STMICROELECTRONICS #*#*\n\r");
 
-    while (1)
-        ; // infinite loop
+    apps_process_error(stse_ret);
 
     return 0;
 }
